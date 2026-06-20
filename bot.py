@@ -356,8 +356,11 @@ async def custom_help(ctx):
 # --- ГРУППА КОМАНД ГЕНЕРАЦИИ (S g ...) ---
 
 @bot.group(name="g", invoke_without_command=True)
-async def generate_group(ctx):
-    await ctx.send(get_markov_text())
+async def generate_group(ctx, *, user_text: str = None):
+    response = get_markov_text(seed_message=user_text) if user_text else get_markov_text()
+    if user_text:
+        response = f"{user_text} {response}"
+    await ctx.send(response)
 
 @generate_group.command(name="a")
 async def gen_anecdote(ctx, *, start_text: str = None):
